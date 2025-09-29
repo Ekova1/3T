@@ -1,0 +1,8 @@
+@import url("../../public/fonts/Montserrat/stylesheet.css");
+@import "tailwindcss";
+@import "./color-palette.css";
+
+
+body{
+	font-family: "Montserrat", sans-serif;
+}
