@@ -1,13 +1,16 @@
-import { UIModal } from '../components/uikit/UIModal'
-import { UIButton } from '../components/uikit/UIButton'
+import { UIModal } from '../../uikit/UIModal'
+import { UIButton } from '../../uikit/UIButton'
 
-export function GameOverModal() {
+export function GameOverModal({ winnerSymbol, handleModalClose, name, playersList }) {
 	return (
 		<UIModal isOpen={!!winnerSymbol} onClose={handleModalClose}>
 			<UIModal.Header>Игра завершена!</UIModal.Header>
 
 			<UIModal.Body>
-				<div className="text-sm mt-2">Победитель: <span className='text-secondary'>Ekova1</span></div>
+				<div className="text-sm mt-2">Победитель: <span className='text-secondary'>{name}</span></div>
+				<div className="w-full mt-2 grid grid-cols-2 gap-2 overflow-hidden">
+					{playersList}
+				</div>
 			</UIModal.Body>
 
 			<UIModal.Footer className='flex gap-4 justify-end mt-auto'>

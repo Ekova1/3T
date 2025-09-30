@@ -12,9 +12,9 @@ export default function HomePage() {
 
 function HomePageLayout({ header, children }) {
 	return (
-		<div className='bg-zinc-100 min-h-screen'>
+		<div className='bg-zinc-100 min-h-screen '>
 			{header}
-			<main className='pt-4 mx-auto w-max'>
+			<main className='pt-4 mx-auto w-2xl'>
 				{children}
 			</main>
 		</div>

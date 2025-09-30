@@ -4,31 +4,84 @@ import { BackLink } from './UI/BackLink'
 import { GameInfo } from './UI/GameInfo'
 import { PlayerInfo } from './UI/PlayerInfo'
 import { PLAYERS, MOVE_ORDER } from './constance'
+import { GameMoveInfo } from './UI/GameMoveInfo'
+import { useGameState } from './model/useGameState'
+import { GameCell } from './UI/GameCell'
+import { GameOverModal } from './UI/GameOverModal'
 
+
+const PLAYERS_COUNT = 4
 export function Game() {
-	return (
-		<GameLayout
-			backLink={<BackLink />}
-			gameTitle={<GameTitle />}
-			gameInfo={<GameInfo
-				playersCount={2}
-				isRatingGame
-				timeMode={"1 мин на ход"}
-			/>}
-			playersList={PLAYERS.map((player, index) => (
-				<PlayerInfo
-					gridIndex={index}
-					key={player.id}
-					isRight={index == 1 || index == 2}
-					avatar={player.avatar}
-					name={player.name}
-					rating={player.rating}
-					symbol={MOVE_ORDER[index]}
-					secondsTimer={60}
-				/>
-			))}
-		>
+	const {
+		cells,
+		currentStep,
+		setGameState,
+		nextStep,
+		playersTimeOver,
+		handleCellClick,
+		handleTimeOver,
+		winnerSymbol,
+		winner
+	} = useGameState(PLAYERS_COUNT)
 
-		</GameLayout>
+	return (
+		<>
+			<GameLayout
+				backLink={<BackLink />}
+				gameTitle={<GameTitle />}
+				gameInfo={<GameInfo
+					playersCount={2}
+					isRatingGame
+					timeMode={"1 мин на ход"}
+				/>}
+				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => (
+					<PlayerInfo
+						gridIndex={index}
+						key={player.id}
+						isRight={index == 1 || index == 2}
+						avatar={player.avatar}
+						name={player.name}
+						rating={player.rating}
+						symbol={MOVE_ORDER[index]}
+						secondsTimer={60}
+					/>
+				))}
+				gameMoveInfo={<GameMoveInfo currentStep={currentStep} nextStep={nextStep} />}
+				cells={
+					cells.map((symbol, index) => {
+						return <GameCell
+							key={index}
+							symbol={symbol}
+							onClick={() => handleCellClick(index)}
+							i={index}
+							winnerSymbol={winner?.sequence.includes(index) ? winnerSymbol : null}
+							disabled={!!winnerSymbol}
+						/>
+					})
+				}
+			>
+			</GameLayout >
+
+			<GameOverModal
+				winnerSymbol={winnerSymbol}
+				handleModalClose={() => console.log("closing...")}
+				name="Ekova1"
+				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => (
+					<PlayerInfo
+						gridIndex={index}
+						key={player.id}
+						isRight={index == 1 || index == 2}
+						avatar={player.avatar}
+						name={player.name}
+						rating={player.rating}
+						symbol={MOVE_ORDER[index]}
+						secondsTimer={60}
+					/>
+				))}
+			/>
+		</>
+
+
+
 	)
 }

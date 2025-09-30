@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { MOVE_ORDER } from './constance'
-import { getWinner, getNextStep } from '.'
+import { MOVE_ORDER } from '../constance'
+import { getWinner } from './getWinner'
+import { getNextStep } from './getNextStep'
 
 
 
@@ -11,7 +12,7 @@ export function useGameState(playersCount) {
 		playersTimeOver: [],
 	}))
 
-	const nextStep = getNextStep(currentStep, playersCount, playersTimeOver = [])
+	const nextStep = getNextStep(currentStep, playersCount, playersTimeOver)
 	const winner = getWinner(cells, 5, 19)
 	const winnerSymbol = currentStep == nextStep ? currentStep : winner?.winnerSymbol
 
@@ -44,6 +45,7 @@ export function useGameState(playersCount) {
 		playersTimeOver,
 		handleCellClick,
 		handleTimeOver,
-		winnerSymbol
+		winnerSymbol,
+		winner
 	}
 } 

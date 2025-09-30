@@ -63,7 +63,6 @@ function GameCellsGrid({ children }) {
 }
 
 function GameCell({ symbol, onClick, winner, disabled }) {
-	if (winner) console.log(GAME_SYMBOLS_COLORS[winner?.winnerSymbol])
 	return (
 		<button
 			className={clsx(

@@ -17,7 +17,7 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, i
 			gridPositions[gridIndex],
 			'flex items-center gap-6 overflow-hidden text-main-black'
 		)}>
-			<div className={clsx('relative', isRight && 'order-3')}>
+			<div className={clsx('relative w-full', isRight && 'order-3')}>
 				<div className='flex items-center gap-2 text-start text-secondary  overflow-hidden '>
 					<img src={avatar} alt="avatar" width={50} height={50} className='rounded-full' />
 					<div>
