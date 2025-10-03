@@ -6,25 +6,25 @@ import { GameInfo } from './UI/GameInfo'
 import { PlayerInfo } from './UI/PlayerInfo'
 import { PLAYERS, MOVE_ORDER } from './constance'
 import { GameMoveInfo } from './UI/GameMoveInfo'
-// import { useGameState } from './model/useGameState'
 import { GameCell } from './UI/GameCell'
 import { GameOverModal } from './UI/GameOverModal'
 import { getNextStep } from './model/getNextStep'
 import { getWinner } from './model/getWinner'
-import { gameStateReducer, initGameState, GAME_STATE_ACTIONS } from './model/GameStateReducer'
+import { gameReducer, initGameState, GAME_STATE_ACTIONS } from './model/gameReducer'
+import { computePlayerTimer } from './model/computePlayerTimer'
 
 
 const PLAYERS_COUNT = 4
 export function Game() {
 	const [gameState, dispatch] = useReducer(
-		gameStateReducer,
-		{ playersCount: PLAYERS_COUNT },
+		gameReducer,
+		{ playersCount: PLAYERS_COUNT, defaultTimer: 60000, currentStepStart: Date.now() },
 		initGameState
 	)
-	const currentStep = gameState.currentStep
-	const cells = gameState.cells
+	const currentStep = gameState?.currentStep
+	const cells = gameState?.cells
 
-	const nextStep = getNextStep(gameState.currentStep, gameState.playersCount)
+	const nextStep = getNextStep(gameState.currentStep, gameState.playersCount, gameState.timers)
 	const winner = getWinner(cells, 5, 19)
 	const winnerSymbol = currentStep == nextStep ? currentStep : winner?.winnerSymbol
 
@@ -34,22 +34,27 @@ export function Game() {
 				backLink={<BackLink />}
 				gameTitle={<GameTitle />}
 				gameInfo={<GameInfo
-					playersCount={2}
+					playersCount={PLAYERS_COUNT}
 					isRatingGame
 					timeMode={"1 мин на ход"}
 				/>}
-				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => (
-					<PlayerInfo
-						gridIndex={index}
-						key={player.id}
-						isRight={index == 1 || index == 2}
-						avatar={player.avatar}
-						name={player.name}
-						rating={player.rating}
-						symbol={MOVE_ORDER[index]}
-						secondsTimer={60}
-					/>
-				))}
+				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => {
+					const playerSymbol = MOVE_ORDER[index]
+					const { timer, timerStartAt } = computePlayerTimer(gameState, playerSymbol)
+					return (
+						<PlayerInfo
+							gridIndex={index}
+							key={player.id}
+							isRight={index == 1 || index == 2}
+							avatar={player.avatar}
+							name={player.name}
+							rating={player.rating}
+							symbol={playerSymbol}
+							timer={timer}
+							timerStartAt={timerStartAt}
+						/>
+					)
+				})}
 				gameMoveInfo={<GameMoveInfo currentStep={currentStep} nextStep={nextStep} />}
 				cells={
 					cells.map((symbol, index) => {
@@ -58,7 +63,8 @@ export function Game() {
 							symbol={symbol}
 							onClick={() => dispatch({
 								type: GAME_STATE_ACTIONS.CELL_CLICK,
-								index
+								index,
+								now: Date.now()
 							})}
 							i={index}
 							winnerSymbol={winner?.sequence.includes(index) ? winnerSymbol : null}
@@ -82,7 +88,6 @@ export function Game() {
 						name={player.name}
 						rating={player.rating}
 						symbol={MOVE_ORDER[index]}
-						secondsTimer={60}
 					/>
 				))}
 			/>

@@ -1,17 +1,22 @@
 import clsx from 'clsx'
 import { GameSymbol } from './GameSymbol'
+import { useNow } from '../../lib/useNow';
 
-export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, isTimerRunning, secondsTimer }) {
+export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, timer, timerStartAt }) {
+	const now = useNow(1000, timerStartAt)
+	const mills = Math.max(now ? timer - (now - timerStartAt) : timer, 0)
+
+	const seconds = Math.ceil(mills / 1000)
 	const gridPositions = [
 		'row-start-1 col-start-1',      // верхний левый
 		'row-start-1 col-start-2',      // верхний правый  
 		'row-start-2 col-start-2',      // нижний правый
 		'row-start-2 col-start-1',      // нижний левый
 	];
-	const minutes = String(Math.floor(secondsTimer / 60)).padStart(2, '0')
-	const seconds = String(secondsTimer % 60).padStart(2, '0')
-	const isWarning = secondsTimer < 10 && secondsTimer != 0
-	const isDanger = secondsTimer < 4 && secondsTimer != 0
+	const minutesString = String(Math.floor(seconds / 60)).padStart(2, '0')
+	const secondsString = String(seconds % 60).padStart(2, '0')
+	const isWarning = seconds < 10 && seconds != 0
+	const isDanger = seconds < 4 && seconds != 0
 	return (
 		<div className={clsx(
 			gridPositions[gridIndex],
@@ -34,12 +39,13 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, i
 			<div className={clsx(
 				' text-lg font-medium w-13',
 				isRight && 'order-1',
-				!isTimerRunning && 'opacity-50',
+				!timerStartAt && 'opacity-50',
 				isWarning && 'text-amber-600',
 				isDanger && 'text-red-600',
 			)}>
-				{minutes}:{seconds}
+				{minutesString}:{secondsString}
 			</div>
 		</div>
 	)
 }
+
