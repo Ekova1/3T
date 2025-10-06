@@ -12,15 +12,24 @@ import { getNextStep } from './model/getNextStep'
 import { getWinner } from './model/getWinner'
 import { gameReducer, initGameState, GAME_STATE_ACTIONS } from './model/gameReducer'
 import { computePlayerTimer } from './model/computePlayerTimer'
+import { useInterval } from '../lib/useNow'
 
 
 const PLAYERS_COUNT = 4
 export function Game() {
 	const [gameState, dispatch] = useReducer(
 		gameReducer,
-		{ playersCount: PLAYERS_COUNT, defaultTimer: 60000, currentStepStart: Date.now() },
+		{ playersCount: PLAYERS_COUNT, defaultTimer: 2000, currentStepStart: Date.now() },
 		initGameState
 	)
+
+	useInterval(1000, gameState.currentStepStart, () => {
+		dispatch({
+			type: GAME_STATE_ACTIONS.TICK,
+			now: Date.now(),
+		})
+	})
+
 	const currentStep = gameState?.currentStep
 	const cells = gameState?.cells
 

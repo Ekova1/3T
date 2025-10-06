@@ -4,6 +4,7 @@ import { getNextStep } from './getNextStep'
 
 export const GAME_STATE_ACTIONS = {
 	CELL_CLICK: "CELL_CLICK",
+	TICK: "TICK",
 }
 
 
@@ -22,16 +23,30 @@ export const initGameState = ({ playersCount, defaultTimer, currentStepStart }) 
 
 
 export const gameReducer = (gameState, action) => {
-	const { index, now } = action
 	switch (action.type) {
 		case GAME_STATE_ACTIONS.CELL_CLICK: {
+			const { index, now } = action
 			if (gameState.cells[index]) return gameState
 
-			const nextStep = getNextStep(gameState.currentStep, gameState.playersCount)
+			const nextStep = getNextStep(gameState.currentStep, gameState.playersCount, gameState.timers)
 
 			return {
 				...gameState,
 				cells: updateCells(gameState, index),
+				currentStep: nextStep,
+				currentStepStart: now,
+				timers: updateTimers(gameState, now)
+			}
+		}
+
+		case GAME_STATE_ACTIONS.TICK: {
+			const { now } = action
+			if (!isTimeOver(gameState, now)) return gameState
+
+			const nextStep = getNextStep(gameState.currentStep, gameState.playersCount, gameState.timers)
+
+			return {
+				...gameState,
 				currentStep: nextStep,
 				currentStepStart: now,
 				timers: updateTimers(gameState, now)
@@ -57,4 +72,9 @@ function updateTimers(gameState, now) {
 		...gameState.timers,
 		[gameState.currentStep]: timer - diff
 	}
+}
+
+function isTimeOver(gameState, now) {
+	const timer = updateTimers(gameState, now)[gameState.currentStep]
+	return timer <= 0
 }
