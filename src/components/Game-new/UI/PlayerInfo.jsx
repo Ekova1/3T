@@ -13,8 +13,8 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, t
 		'row-start-2 col-start-2',      // нижний правый
 		'row-start-2 col-start-1',      // нижний левый
 	];
-	const minutesString = String(Math.floor(seconds / 60)).padStart(2, '0')
-	const secondsString = String(seconds % 60).padStart(2, '0')
+	const minutesString = String(Math.floor(seconds / 60) || 0).padStart(2, '0')
+	const secondsString = String((seconds % 60) || 0).padStart(2, '0')
 	const isWarning = seconds < 10 && seconds != 0
 	const isDanger = seconds < 4 && seconds != 0
 	return (

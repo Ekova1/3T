@@ -86,7 +86,6 @@ export function Game() {
 
 			<GameOverModal
 				winnerSymbol={winnerSymbol}
-				handleModalClose={() => console.log("closing...")}
 				name={PLAYERS[MOVE_ORDER.indexOf(winnerSymbol)]?.name}
 				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => {
 					const playerSymbol = MOVE_ORDER[index]

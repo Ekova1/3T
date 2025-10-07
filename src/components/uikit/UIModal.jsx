@@ -1,7 +1,19 @@
 import clsx from 'clsx'
+import { useState } from 'react';
 import { createPortal } from 'react-dom'
 
-export function UIModal({ className, size = 'md', isOpen = false, onClose, children }) {
+export function UIModal({ className, size = 'md', isOpen, children }) {
+	const [hideModal, setHideModal] = useState(false);
+
+	function closeModal() {
+		setHideModal(true)
+	}
+
+	const handleOverlayClick = (e) => {
+		if (e.target === e.currentTarget) {
+			closeModal();
+		}
+	};
 
 	const modal = (
 		<div
@@ -9,7 +21,7 @@ export function UIModal({ className, size = 'md', isOpen = false, onClose, child
 				className,
 				'fixed inset-0 bg-slate-900/60 backdrop-blur p-15 overflow-y-auto'
 			)}
-
+			onClick={handleOverlayClick}
 		>
 			<div className={clsx(
 				"bg-white min-h-[320px] w-full rounded-lg mx-auto relative p-5 flex flex-col",
@@ -18,16 +30,18 @@ export function UIModal({ className, size = 'md', isOpen = false, onClose, child
 					full: "w-full",
 				}[size]
 			)}>
-				<button className="absolute -right-10 top-0 bg-white/10 hover:bg-white/20 p-2 rounded-md transition-colors" onClick={() => onClose()}>
+				<button
+					className="absolute -right-10 top-0 bg-white/10 hover:bg-white/20 p-2 rounded-md transition-colors"
+					onClick={closeModal}
+				>
 					<CloseSvg />
 				</button>
 				{children}
 			</div>
-
 		</div>
 	)
 
-	if (isOpen) return createPortal(modal, document.getElementById('modal'))
+	if (isOpen && !hideModal) return createPortal(modal, document.getElementById('modal'))
 }
 
 

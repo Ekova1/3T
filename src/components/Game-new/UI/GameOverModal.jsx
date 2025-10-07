@@ -1,9 +1,9 @@
 import { UIModal } from '../../uikit/UIModal'
 import { UIButton } from '../../uikit/UIButton'
 
-export function GameOverModal({ winnerSymbol, handleModalClose, name, playersList }) {
+export function GameOverModal({ winnerSymbol, name, playersList }) {
 	return (
-		<UIModal isOpen={!!winnerSymbol} onClose={handleModalClose}>
+		<UIModal isOpen={!!winnerSymbol}>
 			<UIModal.Header>Игра завершена!</UIModal.Header>
 
 			<UIModal.Body>
