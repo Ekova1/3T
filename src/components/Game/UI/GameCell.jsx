@@ -1,5 +1,5 @@
 import { GAME_SYMBOLS_COLORS } from '../constance'
-import { GameSymbol } from '../../Game/GameSymbol'
+import { GameSymbol } from './GameSymbol'
 import clsx from 'clsx'
 
 export function GameCell({ symbol, onClick, winnerSymbol, disabled }) {

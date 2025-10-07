@@ -19,7 +19,7 @@ const PLAYERS_COUNT = 4
 export function Game() {
 	const [gameState, dispatch] = useReducer(
 		gameReducer,
-		{ playersCount: PLAYERS_COUNT, defaultTimer: 1000, currentStepStart: Date.now() },
+		{ playersCount: PLAYERS_COUNT, defaultTimer: 60000, currentStepStart: Date.now() },
 		initGameState
 	)
 
