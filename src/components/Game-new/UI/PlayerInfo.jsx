@@ -4,8 +4,6 @@ import { useNow } from '../../lib/useNow';
 
 export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, timer, timerStartAt }) {
 	const now = useNow(1000, timerStartAt)
-	// const timerValue = timer ? timer : 0
-	// const mills = Math.max((now) ? timerValue - (now - timerStartAt) : timerValue, 0)
 	const mills = Math.max((now) ? timer - (now - timerStartAt) : timer, 0)
 
 	const seconds = Math.ceil(mills / 1000)
@@ -25,9 +23,9 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, t
 			'flex items-center gap-6 overflow-hidden text-main-black'
 		)}>
 			<div className={clsx('relative w-full', isRight && 'order-3')}>
-				<div className='flex items-center gap-2 text-start text-secondary  overflow-hidden '>
+				<div className='flex items-center gap-2 text-start text-secondary overflow-hidden'>
 					<img src={avatar} alt="avatar" width={50} height={50} className='rounded-full' />
-					<div>
+					<div className='min-w-0 flex-1'>
 						<div className="truncate text-xl">{name}</div>
 						<div className="text-slate-400 text-sm">Рейтинг: {rating}</div>
 					</div>
@@ -37,9 +35,9 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, t
 				</div>
 			</div>
 
-			<div className={clsx('w-px h-6 bg-slate-200 ', isRight && 'order-2')}></div>
+			<div className={clsx('w-px h-6 bg-slate-300', isRight && 'order-2')}></div>
 			<div className={clsx(
-				' text-lg font-medium w-13',
+				' text-lg font-medium w-21',
 				isRight && 'order-1',
 				!timerStartAt && 'opacity-50',
 				isWarning && 'text-amber-600',
