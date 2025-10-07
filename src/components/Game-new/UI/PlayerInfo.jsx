@@ -6,7 +6,7 @@ export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, t
 	const now = useNow(1000, timerStartAt)
 	// const timerValue = timer ? timer : 0
 	// const mills = Math.max((now) ? timerValue - (now - timerStartAt) : timerValue, 0)
-	const mills = Math.max((now) ? timer - (now - timer) : timer, 0)
+	const mills = Math.max((now) ? timer - (now - timerStartAt) : timer, 0)
 
 	const seconds = Math.ceil(mills / 1000)
 	const gridPositions = [
