@@ -23,19 +23,19 @@ export function Game() {
 		initGameState
 	)
 
-	useInterval(1000, gameState.currentStepStart, () => {
-		dispatch({
-			type: GAME_STATE_ACTIONS.TICK,
-			now: Date.now(),
-		})
-	})
-
 	const currentStep = gameState?.currentStep
 	const cells = gameState?.cells
 
 	const nextStep = getNextStep(gameState.currentStep, gameState.playersCount, gameState.timers)
 	const winner = getWinner(cells, 5, 19)
 	const winnerSymbol = currentStep == nextStep ? currentStep : winner?.winnerSymbol
+
+	useInterval(1000, !winnerSymbol ? gameState.currentStepStart : undefined, () => {
+		dispatch({
+			type: GAME_STATE_ACTIONS.TICK,
+			now: Date.now(),
+		})
+	})
 
 	return (
 		<>
@@ -87,18 +87,23 @@ export function Game() {
 			<GameOverModal
 				winnerSymbol={winnerSymbol}
 				handleModalClose={() => console.log("closing...")}
-				name="Ekova1"
-				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => (
-					<PlayerInfo
-						gridIndex={index}
-						key={player.id}
-						isRight={index == 1 || index == 2}
-						avatar={player.avatar}
-						name={player.name}
-						rating={player.rating}
-						symbol={MOVE_ORDER[index]}
-					/>
-				))}
+				name={PLAYERS[MOVE_ORDER.indexOf(winnerSymbol)]?.name}
+				playersList={PLAYERS.slice(0, PLAYERS_COUNT).map((player, index) => {
+					const playerSymbol = MOVE_ORDER[index]
+					const { timer } = computePlayerTimer(gameState, playerSymbol)
+					return (
+						<PlayerInfo
+							gridIndex={index}
+							key={player.id}
+							isRight={index == 1 || index == 2}
+							avatar={player.avatar}
+							name={player.name}
+							rating={player.rating}
+							symbol={MOVE_ORDER[index]}
+							timer={timer}
+						/>
+					)
+				})}
 			/>
 		</>
 

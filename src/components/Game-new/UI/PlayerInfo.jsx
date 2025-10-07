@@ -4,8 +4,9 @@ import { useNow } from '../../lib/useNow';
 
 export function PlayerInfo({ gridIndex, isRight, avatar, name, rating, symbol, timer, timerStartAt }) {
 	const now = useNow(1000, timerStartAt)
-	const timerValue = timer ? timer : 0
-	const mills = Math.max((now) ? timerValue - (now - timerStartAt) : timerValue, 0)
+	// const timerValue = timer ? timer : 0
+	// const mills = Math.max((now) ? timerValue - (now - timerStartAt) : timerValue, 0)
+	const mills = Math.max((now) ? timer - (now - timer) : timer, 0)
 
 	const seconds = Math.ceil(mills / 1000)
 	const gridPositions = [
