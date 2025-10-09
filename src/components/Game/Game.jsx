@@ -60,7 +60,7 @@ export function Game() {
 							rating={player.rating}
 							symbol={playerSymbol}
 							timer={timer}
-							timerStartAt={timerStartAt}
+							timerStartAt={!winnerSymbol ? timerStartAt : undefined}
 						/>
 					)
 				})}
